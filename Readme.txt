@@ -1,0 +1,1 @@
+This repository is to save AI assignments of Pratik Bhagwat online.
