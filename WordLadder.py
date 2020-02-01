@@ -1,7 +1,7 @@
 # startWord = input("Enter the starting word")
 # endWord = input("Enter the last word")
 
-dictionary = {"Hello","Bello","Belly","Delly","Dolly"}
+dictionary = {"Hello","Belly","Delly","Dolly","Bello","Hellp","Dellp","Dello","Bello"}
 
 searchDictionary = {} # it will contain word : *ord , w*rd, wo*d,wor* etc
 inverseSearchDictionary = {} # it will contain *ord : ford,cord,bord etc
@@ -40,7 +40,6 @@ def prepareDictionaries(dictionary):
 
 def getChildren(word):
     answer = []
-
     for incompleteWord in searchDictionary[word]:
         answer += inverseSearchDictionary[incompleteWord]
     return answer
@@ -48,16 +47,21 @@ def getChildren(word):
 
 def startSearch(startWord,endWord):
     queue = []
-    queue.append(startWord)
+    queue.append( tuple([startWord]) )
     visited = set({})
     path = []
     while len(queue)!=0:
         word = queue.pop(0)
-        if word == endWord:
-            return True
+        if word[len(word)-1] == endWord:
+            return word
         if word not in visited:
-            visited.add(word)
-            queue += getChildren(word)
+            visited.add(word[len(word)-1])
+            children = getChildren(word[len(word)-1])
+            for child in children:
+                if child not in visited:
+                    newTuple = word + tuple([child])
+                    queue.append(newTuple)
+
     return False
 
 prepareDictionaries(dictionary)
