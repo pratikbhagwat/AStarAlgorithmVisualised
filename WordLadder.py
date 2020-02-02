@@ -1,7 +1,13 @@
-# startWord = input("Enter the starting word")
-# endWord = input("Enter the last word")
-
-dictionary = {"Hello","Belly","Delly","Dolly","Bello","Hellp","Dellp","Dello","Bello"}
+"""
+Name: Pratik Bhagwat
+"""
+fileName = input("Enter the absolute pathname of the dictionary file")
+startName = input("Enter the start word")
+endName = input("Enter the end word")
+dictionary =set({})
+dictionaryFile = open(fileName,"r")
+for line in dictionaryFile:
+    dictionary.add(line[0:len(line)-1])
 
 searchDictionary = {} # it will contain word : *ord , w*rd, wo*d,wor* etc
 inverseSearchDictionary = {} # it will contain *ord : ford,cord,bord etc
@@ -65,9 +71,9 @@ def startSearch(startWord,endWord):
     return False
 
 prepareDictionaries(dictionary)
-print(startSearch("Hello","Dolly"))
+print(startSearch(startName,endName))
 
-
-
-
-
+"""
+result for cold to warm is ('cold', 'cord', 'word', 'ward', 'warm')
+result for small to short is ('small', 'shall', 'shale', 'share', 'shore', 'short')
+"""
