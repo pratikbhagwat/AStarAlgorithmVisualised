@@ -1,0 +1,17 @@
+We are going to get the fixed pixel values
+thus fix the movability quotient to every type of pixel value in hashmap
+according to the elevation of the neighbor decide whether to increase the pixel quotient or decrese it.
+
+
+
+
+
+
+heuristic = time taken same like cost.
+
+
+
+
+
+
+
