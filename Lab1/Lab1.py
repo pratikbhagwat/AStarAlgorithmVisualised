@@ -1,7 +1,6 @@
 from PIL import Image
 import sys
 import heapq
-import Lab1.Node
 import math
 image = Image.open("terrainMap.png")
 
@@ -19,7 +18,6 @@ speedMap = {
     (71,51,3): 10,
     (0,0,0) : 8,
     (205,0,101):0.00000000000000000001
-
 }
 
 
@@ -37,7 +35,7 @@ class Node:
         """
         compares the heuristic calculated from the below expression
         """
-        return self.timeTakenFromTheSourceToReachHere + (self.distanceFromDestination / self.speedMap[ self.image.load()[self.coOrdinateTuple[0],self.coOrdinateTuple[1]]]) < self.timeTakenFromTheSourceToReachHere + (other.distanceFromDestination / other.speedMap[ other.image.load()[other.coOrdinateTuple[0],other.coOrdinateTuple[1]]])
+        return self.timeTakenFromTheSourceToReachHere + (self.distanceFromDestination / self.speedMap[ self.image.load()[self.coOrdinateTuple[0],self.coOrdinateTuple[1]]]) < other.timeTakenFromTheSourceToReachHere + (other.distanceFromDestination / other.speedMap[ other.image.load()[other.coOrdinateTuple[0],other.coOrdinateTuple[1]]])
     
 
 
@@ -69,16 +67,15 @@ def getNeighboringVertices(vertex,elevationMap,speedMap,destinationTuple): # eac
     neighbors = []
 
     if vertex.coOrdinateTuple[0]-1 > -1 and vertex.coOrdinateTuple[0]+1 < 395 and vertex.coOrdinateTuple[1]-1>-1 and vertex.coOrdinateTuple[1]+1<500:
-        Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (10.29/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
-        Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (10.29/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
-        Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (7.55/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
-        Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (7.55/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
+        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (10.29/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (10.29/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (7.55/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (7.55/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
 
-
-        Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
-        Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
-        Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
-        Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,image)
+        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( ((10.29**2 + 7.55**2)**0.5)/speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]),destinationTuple,speedMap,image))
 
     return neighbors
 
@@ -94,25 +91,35 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
 
     costDictionary[(sourceTuple[0], sourceTuple[1])] = 0
     priorityQueue = []
-    heapq.heappush(priorityQueue,Node(sourceTuple,elevationMap[sourceTuple[0],sourceTuple[1]],0,destinationTuple,speedMap,image))
+    heapq.heappush(priorityQueue,Node(sourceTuple,elevationMap,0,destinationTuple,speedMap,image))
     visited = set({})
     visited.add((sourceTuple[0], sourceTuple[1]))
 
 
 
-
+    pathMap = {sourceTuple : None}
 
     while len(priorityQueue)!=0:
         uVertex = priorityQueue.pop(0)
-        neighbors = getNeighboringVertices(uVertex)
-
+        if uVertex.coOrdinateTuple == destinationTuple:
+            break
+        neighbors = getNeighboringVertices(uVertex,elevationMap,speedMap,destinationTuple)
         for neighbor in neighbors:
             if costDictionary[neighbor.coOrdinateTuple] > neighbor.timeTakenFromTheSourceToReachHere:
                 costDictionary[neighbor.coOrdinateTuple] = neighbor.timeTakenFromTheSourceToReachHere
-
+                pathMap[ neighbor.coOrdinateTuple ] = uVertex.coOrdinateTuple
                 heapq.heappush(priorityQueue,neighbor)
 
-    print(costDictionary)
+    path = []
+    path.append(destinationTuple)
+    value = destinationTuple
+    while pathMap[value] != None:
+        path.append(pathMap[value])
+        value = pathMap[value]
+
+    return path
+
+
                 
                 
 
@@ -120,10 +127,15 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
 
 
 
+elevationMap = processElevationFile("ElevationTextFile")
 
+path = runAStarAlgorithm( (230,327),image,(241,347),elevationMap,speedMap)
+imageAccesser = image.load()
+for pixel in path:
+    imageAccesser[pixel] = (255,0,0)
 
+image.show()
 
-runAStarAlgorithm(230 ,327,image)
 
 
 
