@@ -1,5 +1,7 @@
 from PIL import Image
 import sys
+import heapq
+import Lab1.Node
 import math
 image = Image.open("terrainMap.png")
 
@@ -17,6 +19,7 @@ speedMap = {
     (71,51,3): 10,
     (0,0,0) : 8,
     (205,0,101):0.00000000000000000001
+
 }
 
 
@@ -45,14 +48,21 @@ def processElevationFile(file):
     return elevationMapTranspose
 
 
-def runAStarAlgorithm(x,y,image):
+def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
     pixelArray = image.load()
     distanceDictionary = {}
     for xCoOrdinate in range(image.size[0]):
         for yCoOrdinate in range(image.size[1]):
             distanceDictionary[(xCoOrdinate,yCoOrdinate)]=sys.maxsize
 
-    distanceDictionary[(x,y)] = 0
+
+
+    distanceDictionary[(x, y)] = 0
+    priorityQueue = []
+    heapq.heappush(priorityQueue,Lab1.Node.Node(sourceTuple,elevationMap[sourceTuple[0],sourceTuple[1]],0,destinationTuple,speedMap,image))
+
+
+
     visited = set({})
     initialVertex = (x,y)
     visited.add(initialVertex)
