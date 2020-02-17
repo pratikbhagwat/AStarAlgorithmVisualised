@@ -7,18 +7,35 @@ image = Image.open("terrainMap.png")
 image = image.convert("RGB")
 
 # defines the speed at the particular RGB point
-speedMap = {
-    (248,148,18) : 10,
-    (255,192,0):5,
-    (255,255,255):8,
-    (2,208,60):5,
-    (2,136,40):3,
-    (5,73,24) : 0.00000000000000000001,
-    (0,0,255):0.00000000000000000001,
-    (71,51,3): 10,
-    (0,0,0) : 20,
-    (205,0,101):0.00000000000000000001
-}
+# summer Speed
+# speedMap = {
+#     (248,148,18) : 10,
+#     (255,192,0):5,
+#     (255,255,255):8,
+#     (2,208,60):5,
+#     (2,136,40):3,
+#     (5,73,24) : 0.00000000000000000001,
+#     (0,0,255):20,
+#     (71,51,3): 10,
+#     (0,0,0) : 10,
+#     (205,0,101):0.00000000000000000001
+# }
+
+
+# Fall Speed
+# speedMap = {
+#     (248,148,18) : 10,
+#     (255,192,0):5,
+#     (255,255,255):8,
+#     (2,208,60):5,
+#     (2,136,40):3,
+#     (5,73,24) : 0.00000000000000000001,
+#     (0,0,255):20,
+#     (71,51,3): 10,
+#     (0,0,0) : 10,
+#     (205,0,101):0.00000000000000000001
+# }
+
 
 
 class Node:
@@ -42,7 +59,6 @@ class Node:
 
 def processElevationFile(file):
     """
-
     :param file:  file containing elevation values
     :return: returns the elevation 2d array
     """
@@ -65,8 +81,6 @@ def processElevationFile(file):
 
 def getNeighboringVertices(vertex,elevationMap,speedMap,destinationTuple): # each pixel will have eight neighbors
     neighbors = []
-
-
 
     if vertex.coOrdinateTuple[0]-1 > -1 and vertex.coOrdinateTuple[0]+1 < 395 and vertex.coOrdinateTuple[1]-1>-1 and vertex.coOrdinateTuple[1]+1<500:
 
@@ -109,8 +123,6 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
     visited = set({})
     visited.add((sourceTuple[0], sourceTuple[1]))
 
-
-
     pathMap = {sourceTuple : None}
 
     while len(priorityQueue)!=0:
@@ -134,13 +146,6 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
     return path
 
 
-                
-                
-
-
-
-
-
 elevationMap = processElevationFile("ElevationTextFile")
 
 path = []
@@ -159,38 +164,8 @@ while (destinationIndex != len(sourceDestinationCoordinates)):
     sourceIndex+=1
     destinationIndex+=1
 
-
-
-
-
-
-
-
-
 imageAccesser = image.load()
 for pixel in path:
     imageAccesser[pixel] = (255,0,0)
 
 image.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
