@@ -145,7 +145,7 @@ elevationMap = processElevationFile("ElevationTextFile")
 
 path = []
 
-sourceDestinationFile = open("brown.txt","r")
+sourceDestinationFile = open("red.txt","r")
 
 
 sourceDestinationCoordinates = []
