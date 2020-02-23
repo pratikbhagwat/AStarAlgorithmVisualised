@@ -2,6 +2,8 @@ from PIL import Image
 import sys
 import heapq
 import math
+import sys
+
 
 
 # defines the speed at the particular RGB point
@@ -199,8 +201,10 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
 
 
 def __main__():
-    image = Image.open("terrainMap.png")
+    image = Image.open(sys.argv[0])
     image = image.convert("RGB")
+
+
 
     speedMap = {
         (248, 148, 18): 2.7777,
@@ -213,18 +217,55 @@ def __main__():
         (71, 51, 3): 3,
         (0, 0, 0): 3,
         (205, 0, 101): 0.0000000000000001,
-        (110, 255, 255) : 1.38
 
     }
 
-    elevationMap = processElevationFile("ElevationTextFile.txt")
 
-
-
+    elevationMap = processElevationFile(sys.argv[1])
     path = []
+    sourceDestinationFile = open(sys.argv[2], "r")
+
+    season = sys.argv[3]
+    outPutImage = sys.argv[4]
+
+    if season == "winter":
+        speedMap = {
+            (248, 148, 18): 2.7777,
+            (255, 192, 0): 1.38,
+            (255, 255, 255): 2.7777,
+            (2, 208, 60): 1.9444,
+            (2, 136, 40): 1.38,
+            (5, 73, 24): 0.0000000000000001,
+            (0, 0, 255): 0.0000000000000001,
+            (71, 51, 3): 3,
+            (0, 0, 0): 3,
+            (205, 0, 101): 0.0000000000000001,
+            (110, 255, 255): 1.38
+        }
+        freezeWater(image ,elevationMap,speedMap)
+
+    elif season =="fall":
+        speedMap = {
+            (248, 148, 18): 2.7777,
+            (255, 192, 0): 1.38,
+            (255, 255, 255): 2.7777,
+            (2, 208, 60): 1.9444,
+            (2, 136, 40): 1.38,
+            (5, 73, 24): 0.0000000000000001,
+            (0, 0, 255): 0.0000000000000001,
+            (71, 51, 3): 3,
+            (0, 0, 0): 3,
+            (205, 0, 101): 0.0000000000000001,
+            (110, 255, 255): 1.38
+        }
+
+    elif season == "spring":
+
+    else:
 
 
-    sourceDestinationFile = open("white.txt", "r")
+
+
     sourceDestinationCoordinates = []
 
     for line in sourceDestinationFile:
