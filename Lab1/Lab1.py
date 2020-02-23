@@ -1,5 +1,4 @@
 from PIL import Image
-import sys
 import heapq
 import math
 import sys
@@ -122,15 +121,67 @@ def getNeighboringVertices(vertex,elevationMap,speedMap,destinationTuple,image):
 
     return validNeighbors
 
+def makeMud(image : Image.Image,elevationMap):
+    pixelArray = image.load()
+    waterCoastEdges = []
 
-def freezeWater(image : Image.Image , elevationMap , speedMap ):
+    for row in range(395):
+        for column in range(500):
+            if (pixelArray[row, column] != (0, 0, 255)):
+                neighborsOfCurrentNode = getNeighboringVerticesForMapChange((row, column))
+
+                for neighbor in neighborsOfCurrentNode:
+                    if pixelArray[neighbor[0], neighbor[1]] == (0, 0, 255):
+                        waterCoastEdges.append((row, column))
+                        break
+
+    mudMap = {}
+
+    for edge in waterCoastEdges:
+        neighborsOfEdge = getNeighboringVerticesForMapChange(edge)
+        thePixelWhichDrownedMe = None
+        for neighbor in neighborsOfEdge:
+            if pixelArray[neighbor[0],neighbor[1]] == (0,0,255):
+                if abs(elevationMap[neighbor[0]][neighbor[1]] - elevationMap[edge[0]][edge[1]])<1:
+                    if thePixelWhichDrownedMe != None:
+                        if elevationMap[thePixelWhichDrownedMe[0]][thePixelWhichDrownedMe[1]] < elevationMap[neighbor[0]][neighbor[1]]:
+                            thePixelWhichDrownedMe = neighbor
+                    else:
+                        thePixelWhichDrownedMe = neighbor
+
+                    pixelArray[edge[0],edge[1]] = (133,87,35)
+                    mudMap[edge] = thePixelWhichDrownedMe
+
+    for layer in range(14):
+        newMudMap = {}
+        for mud in mudMap:
+            neighborsOfMud = getNeighboringVerticesForMapChange(mud)
+
+            for neighbor in neighborsOfMud:
+                if pixelArray[neighbor[0], neighbor[1]] != (0,0,255) and pixelArray[neighbor[0], neighbor[1]] != (205, 0, 101):
+                    if abs(elevationMap[neighbor[0]][neighbor[1]] - elevationMap[mudMap[mud][0]][mudMap[mud][1]]) < 1:
+                        pixelArray[neighbor[0], neighbor[1]] = (133,87,35)
+                        if neighbor not in newMudMap:
+                            newMudMap[neighbor] = mudMap[mud]
+                        else:
+                            if elevationMap[newMudMap[neighbor][0]][newMudMap[neighbor][1]] < elevationMap[mudMap[mud][0]][mudMap[mud][1]]:
+                                newMudMap[neighbor] = mudMap[mud]
+        mudMap.clear()
+        mudMap = newMudMap.copy()
+        newMudMap.clear()
+
+
+
+
+
+
+def freezeWater(image : Image.Image ):
     pixelArray = image.load()
 
     waterEdges = []
 
     for row in range(395):
         for column in range(500):
-            # (coOrdinateTuple, elevationMap, timeTakenFromTheSourceToReachHere, destinationTuple, speedMap, image)
             if (pixelArray[row , column] != (0,0,255) ):
                 neighborsOfCurrentNode = getNeighboringVerticesForMapChange((row,column))
 
@@ -144,7 +195,6 @@ def freezeWater(image : Image.Image , elevationMap , speedMap ):
     for layer in range(7):
         frozenLayer = []
         for edge in waterEdges:
-            # neighborsOfCurrentEdge = getNeighboringVertices(edge, elevationMap, speedMap,edge.coOrdinateTuple, image)
             neighborsOfCurrentEdge = getNeighboringVerticesForMapChange(edge)
             for neighbor in neighborsOfCurrentEdge:
 
@@ -201,7 +251,8 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
 
 
 def __main__():
-    image = Image.open(sys.argv[0])
+    print(sys.argv[1])
+    image = Image.open(sys.argv[1])
     image = image.convert("RGB")
 
 
@@ -217,16 +268,15 @@ def __main__():
         (71, 51, 3): 3,
         (0, 0, 0): 3,
         (205, 0, 101): 0.0000000000000001,
-
     }
 
 
-    elevationMap = processElevationFile(sys.argv[1])
+    elevationMap = processElevationFile(sys.argv[2])
     path = []
-    sourceDestinationFile = open(sys.argv[2], "r")
+    sourceDestinationFile = open(sys.argv[3], "r")
 
-    season = sys.argv[3]
-    outPutImage = sys.argv[4]
+    season = sys.argv[4]
+    outPutImage = sys.argv[5]
 
     if season == "winter":
         speedMap = {
@@ -242,9 +292,23 @@ def __main__():
             (205, 0, 101): 0.0000000000000001,
             (110, 255, 255): 1.38
         }
-        freezeWater(image ,elevationMap,speedMap)
+        freezeWater(image)
 
     elif season =="fall":
+        speedMap = {
+            (248, 148, 18): 2.7777,
+            (255, 192, 0): 1.38,
+            (255, 255, 255): 2.0,
+            (2, 208, 60): 1.1,
+            (2, 136, 40): 1.1,
+            (5, 73, 24): 0.0000000000000001,
+            (0, 0, 255): 0.0000000000000001,
+            (71, 51, 3): 3,
+            (0, 0, 0): 3,
+            (205, 0, 101): 0.0000000000000001,
+        }
+
+    elif season == "spring":
         speedMap = {
             (248, 148, 18): 2.7777,
             (255, 192, 0): 1.38,
@@ -256,12 +320,11 @@ def __main__():
             (71, 51, 3): 3,
             (0, 0, 0): 3,
             (205, 0, 101): 0.0000000000000001,
-            (110, 255, 255): 1.38
+            (133, 87, 35):1.38
+
         }
-
-    elif season == "spring":
-
-    else:
+        makeMud(image,elevationMap)
+    # else:
 
 
 
