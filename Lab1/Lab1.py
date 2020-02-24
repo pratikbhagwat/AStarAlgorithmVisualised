@@ -1,11 +1,12 @@
+
+"""
+Author: Pratik Bhagwat
+"""
+
 from PIL import Image
 import heapq
 import math
 import sys
-
-
-
-
 
 
 class Node:
