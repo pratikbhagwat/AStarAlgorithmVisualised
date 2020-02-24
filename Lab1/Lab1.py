@@ -5,10 +5,6 @@ import sys
 
 
 
-# defines the speed at the particular RGB point
-# summer Speed
-
-
 
 
 
@@ -26,7 +22,7 @@ class Node:
         """
         compares the heuristic calculated from the below expression
         """
-        return self.timeTakenFromTheSourceToReachHere + (self.distanceFromDestination / self.speedMap[ self.image.load()[self.coOrdinateTuple[0],self.coOrdinateTuple[1]]]) < other.timeTakenFromTheSourceToReachHere + (other.distanceFromDestination / other.speedMap[ other.image.load()[other.coOrdinateTuple[0],other.coOrdinateTuple[1]]])
+        return self.timeTakenFromTheSourceToReachHere + (self.distanceFromDestination / 2.77) < other.timeTakenFromTheSourceToReachHere + (other.distanceFromDestination / 2.77 )
     
 
 
@@ -105,15 +101,15 @@ def getNeighboringVertices(vertex,elevationMap,speedMap,destinationTuple,image):
         angleOfElevationRightTop = math.atan(((elevationMap[vertex.coOrdinateTuple[0]][vertex.coOrdinateTuple[1]] - elevationMap[vertex.coOrdinateTuple[0]+1][vertex.coOrdinateTuple[1]+1]))/((10.29**2 + 7.55**2)**0.5))
 
 
-        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (10.29/math.cos(angleOfElevationHorizontalLeft)) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationHorizontalLeft)) ) * math.cos(angleOfElevationHorizontalLeft) *10 ,destinationTuple,speedMap,image))
-        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (10.29/math.cos(angleOfElevationHorizontalRight)) /  ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationHorizontalRight)) ) * math.cos(angleOfElevationHorizontalRight) *10,destinationTuple,speedMap,image))
-        neighbors.append(Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (7.55/math.cos(angleOfElevationVerticalBottom)) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationVerticalBottom)) ) * math.cos(angleOfElevationVerticalBottom) *10,destinationTuple,speedMap,image))
-        neighbors.append(Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (7.55/math.cos(angleOfElevationVerticalTop)) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]) * math.cos(angleOfElevationVerticalTop))) * math.cos(angleOfElevationVerticalTop) *10,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (10.29/math.cos(angleOfElevationHorizontalLeft)) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationHorizontalLeft)*math.cos(angleOfElevationHorizontalLeft) ) )  ,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (10.29/math.cos(angleOfElevationHorizontalRight)) /  ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationHorizontalRight))*math.cos(angleOfElevationHorizontalRight) ) ,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (7.55/math.cos(angleOfElevationVerticalBottom)) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationVerticalBottom)*math.cos(angleOfElevationVerticalBottom)) ) ,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + ( (7.55/math.cos(angleOfElevationVerticalTop)) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]]) * math.cos(angleOfElevationVerticalTop)*math.cos(angleOfElevationVerticalTop))) ,destinationTuple,speedMap,image))
 
-        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationLeftBottom) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationLeftBottom))) * math.cos(angleOfElevationLeftBottom) *10,destinationTuple,speedMap,image))
-        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationLeftTop) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationLeftTop))) * math.cos(angleOfElevationLeftTop) *10,destinationTuple,speedMap,image))
-        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationRightBottom) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationRightBottom))) * math.cos(angleOfElevationRightBottom) *10,destinationTuple,speedMap,image))
-        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationRightTop) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationRightTop))) * math.cos(angleOfElevationRightTop) *10,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationLeftBottom) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationLeftBottom)*math.cos(angleOfElevationLeftBottom)))  ,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]-1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationLeftTop) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationLeftTop)*math.cos(angleOfElevationLeftTop))) ,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]-1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationRightBottom) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationRightBottom)*math.cos(angleOfElevationRightBottom)))  ,destinationTuple,speedMap,image))
+        neighbors.append(Node((vertex.coOrdinateTuple[0]+1,vertex.coOrdinateTuple[1]+1),elevationMap,vertex.timeTakenFromTheSourceToReachHere + (((10.29**2 + 7.55**2)**0.5)/math.cos(angleOfElevationRightTop) / ((speedMap[image.load()[vertex.coOrdinateTuple[0],vertex.coOrdinateTuple[1]]])*math.cos(angleOfElevationRightTop)*math.cos(angleOfElevationRightTop))) ,destinationTuple,speedMap,image))
 
         for neighbor in neighbors:
             if validNeighbor(neighbor.coOrdinateTuple):
@@ -251,7 +247,6 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
 
 
 def __main__():
-    print(sys.argv[1])
     image = Image.open(sys.argv[1])
     image = image.convert("RGB")
 
@@ -288,7 +283,7 @@ def __main__():
             (5, 73, 24): 0.0000000000000001,
             (0, 0, 255): 0.0000000000000001,
             (71, 51, 3): 3,
-            (0, 0, 0): 3,
+            (0, 0, 0): 2.7777,
             (205, 0, 101): 0.0000000000000001,
             (110, 255, 255): 1.38
         }
@@ -303,8 +298,8 @@ def __main__():
             (2, 136, 40): 1.1,
             (5, 73, 24): 0.0000000000000001,
             (0, 0, 255): 0.0000000000000001,
-            (71, 51, 3): 3,
-            (0, 0, 0): 3,
+            (71, 51, 3): 2.7777,
+            (0, 0, 0): 2.7777,
             (205, 0, 101): 0.0000000000000001,
         }
 
@@ -317,14 +312,13 @@ def __main__():
             (2, 136, 40): 1.38,
             (5, 73, 24): 0.0000000000000001,
             (0, 0, 255): 0.0000000000000001,
-            (71, 51, 3): 3,
-            (0, 0, 0): 3,
+            (71, 51, 3): 2.7777,
+            (0, 0, 0): 2.777,
             (205, 0, 101): 0.0000000000000001,
             (133, 87, 35):1.38
 
         }
         makeMud(image,elevationMap)
-    # else:
 
 
 
@@ -354,6 +348,6 @@ def __main__():
             imageAccesser[neighbor[0], neighbor[1]] = (84, 22, 180)
 
 
-    image.show()
+    image.save(outPutImage)
 
 __main__()
