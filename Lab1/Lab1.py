@@ -55,12 +55,22 @@ def processElevationFile(file):
     return elevationMapTranspose
 
 def validNeighbor(coordinateTuple):
+    """
+
+    :param coordinateTuple:
+    :return: returns whether the neighbor is valid or not
+    """
     if (coordinateTuple[0] >-1 and  coordinateTuple[0] < 395 ) and (coordinateTuple[1] > -1 and  coordinateTuple[1] < 500):
         return True
     else:
         return False
 
 def getNeighboringVerticesForMapChange(coOrdinateTuple):
+    """
+
+    :param coOrdinateTuple:
+    :return: returns the neighboring vertices
+    """
     neighbors = []
     validNeighbors = []
 
@@ -124,6 +134,13 @@ def getNeighboringVertices(vertex,elevationMap,speedMap,destinationTuple,image):
     return validNeighbors
 
 def makeMud(image : Image.Image,elevationMap):
+    """
+
+    :param image:
+    :param elevationMap:
+    :return:
+    Description:makes the mud for the Spring season
+    """
     pixelArray = image.load()
     waterCoastEdges = []
 
@@ -178,6 +195,12 @@ def makeMud(image : Image.Image,elevationMap):
 
 
 def freezeWater(image : Image.Image ):
+    """
+
+    :param image:
+    :return: None
+    :Description: freezes the water for the winter season
+    """
     pixelArray = image.load()
 
     waterEdges = []
@@ -212,6 +235,17 @@ def freezeWater(image : Image.Image ):
 
 
 def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap,imageCopy):
+    """
+
+    :param sourceTuple:
+    :param image:
+    :param destinationTuple:
+    :param elevationMap:
+    :param speedMap:
+    :param imageCopy:
+    :return: None
+    Description: A Star algorithm inplementation
+    """
     costDictionary = {}
     global imageIndex
     for xCoOrdinate in range(image.size[0]):
