@@ -1,2 +1,0 @@
-The program is a menu driven program . It will ask you for the file containing the numbers. Make sure the file is a text file and the numbers are space seperated.
-Then the program will ask you for the target that you want to generate using those numbers in the file using a random restart approach.

@@ -1,0 +1,3 @@
+(10.29**2 + ((abs(elevationMap[vertex.coOrdinateTuple[0]][vertex.coOrdinateTuple[1]] - elevationMap[vertex.coOrdinateTuple[0]-1][vertex.coOrdinateTuple[1]] ))**2))**0.5
+
+((10.29**2 + 7.55**2)**0.5)

@@ -7,6 +7,11 @@ from PIL import Image
 import heapq
 import math
 import sys
+import cv2
+
+imageIndex = 0
+
+
 
 
 class Node:
@@ -206,24 +211,36 @@ def freezeWater(image : Image.Image ):
 
 
 
-def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
+def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap,imageCopy):
     costDictionary = {}
+    global imageIndex
     for xCoOrdinate in range(image.size[0]):
         for yCoOrdinate in range(image.size[1]):
             costDictionary[(xCoOrdinate,yCoOrdinate)]=sys.maxsize
 
 
 
+    imageAccesserForNewImage = imageCopy.load()
     costDictionary[(sourceTuple[0], sourceTuple[1])] = 0
     priorityQueue = []
     heapq.heappush(priorityQueue,Node(sourceTuple,elevationMap,0,destinationTuple,speedMap,image))
     visited = set({})
-    visited.add((sourceTuple[0], sourceTuple[1]))
+    # visited.add((sourceTuple[0], sourceTuple[1]))
 
     pathMap = {sourceTuple : None}
 
     while len(priorityQueue)!=0:
         uVertex = priorityQueue.pop(0)
+        if uVertex in visited:
+            continue
+        visited.add(uVertex)
+
+        imageAccesserForNewImage[uVertex.coOrdinateTuple[0], uVertex.coOrdinateTuple[1]] = (255, 165, 0)
+        imageCopy.save("/Users/pratikbhagwat/PycharmProjects/PratikBhagwatFAI2020Spring/ImagesForVideo/" + str(imageIndex) + ".jpg")
+
+
+        imageIndex +=1
+
         if uVertex.coOrdinateTuple == destinationTuple:
             break
         neighbors = getNeighboringVertices(uVertex,elevationMap,speedMap,destinationTuple,image)
@@ -250,6 +267,8 @@ def runAStarAlgorithm(sourceTuple,image,destinationTuple,elevationMap,speedMap):
 def __main__():
     image = Image.open(sys.argv[1])
     image = image.convert("RGB")
+    global imageIndex
+
 
 
 
@@ -264,6 +283,8 @@ def __main__():
         (71, 51, 3): 3,
         (0, 0, 0): 3,
         (205, 0, 101): 0.0000000000000001,
+        (240, 94, 35): 0.0000000000000000001
+
     }
 
 
@@ -286,7 +307,8 @@ def __main__():
             (71, 51, 3): 3,
             (0, 0, 0): 2.7777,
             (205, 0, 101): 0.0000000000000001,
-            (110, 255, 255): 1.38
+            (110, 255, 255): 1.38,
+            (240, 94, 35): 0.0000000000000000001
         }
         freezeWater(image)
 
@@ -302,6 +324,7 @@ def __main__():
             (71, 51, 3): 2.7777,
             (0, 0, 0): 2.7777,
             (205, 0, 101): 0.0000000000000001,
+            (240, 94, 35): 0.0000000000000000001
         }
 
     elif season == "spring":
@@ -316,13 +339,11 @@ def __main__():
             (71, 51, 3): 2.7777,
             (0, 0, 0): 2.777,
             (205, 0, 101): 0.0000000000000001,
-            (133, 87, 35):1.38
+            (133, 87, 35):1.38,
+            (240, 94, 35): 0.0000000000000000001
 
         }
         makeMud(image,elevationMap)
-
-
-
 
     sourceDestinationCoordinates = []
 
@@ -331,24 +352,44 @@ def __main__():
 
     sourceIndex = 0
     destinationIndex = 1
+    imageCopy = image.copy()
+
     while (destinationIndex != len(sourceDestinationCoordinates)):
         path += runAStarAlgorithm(sourceDestinationCoordinates[sourceIndex], image,
-                                  sourceDestinationCoordinates[destinationIndex], elevationMap, speedMap)
+                                  sourceDestinationCoordinates[destinationIndex], elevationMap, speedMap, imageCopy)
         sourceIndex += 1
         destinationIndex += 1
 
+
     imageAccesser = image.load()
+    copiedImageAccesser = imageCopy.load()
     for pixel in path:
         imageAccesser[pixel] = (255, 0, 0)
+        copiedImageAccesser[pixel] = (255, 0, 0)
+        imageCopy.save("/Users/pratikbhagwat/PycharmProjects/PratikBhagwatFAI2020Spring/ImagesForVideo/" + str(imageIndex) + ".jpg")
+        imageIndex+=1
+
 
     for checkPoint in sourceDestinationCoordinates:
         neighborsOfCheckPoint = getNeighboringVerticesForMapChange(checkPoint)
         imageAccesser[checkPoint[0],checkPoint[1]] = (84,22,180)
+        copiedImageAccesser[checkPoint[0],checkPoint[1]] = (84,22,180)
+        imageCopy.save("/Users/pratikbhagwat/PycharmProjects/PratikBhagwatFAI2020Spring/ImagesForVideo/" + str(imageIndex) + ".jpg")
+        imageIndex+=1
+
 
         for neighbor in neighborsOfCheckPoint:
             imageAccesser[neighbor[0], neighbor[1]] = (84, 22, 180)
+            copiedImageAccesser[neighbor[0], neighbor[1]] = (84, 22, 180)
+            imageCopy.save("/Users/pratikbhagwat/PycharmProjects/PratikBhagwatFAI2020Spring/ImagesForVideo/" + str(
+                imageIndex) + ".jpg")
+            imageIndex+=1
 
 
-    image.save(outPutImage)
+
+
+    # video.release()
+
+    imageCopy.save(outPutImage)
 
 __main__()
